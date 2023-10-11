@@ -30,9 +30,15 @@ function VirtuallyDom() {
         desc: faker.lorem.lines(Math.random() * 20),
       });
     }
-
     setListData(newData);
   }, []);
+  useEffect(() => {
+    const list = listRef.current;
+    if (list) {
+      // Set scrollTop to a very large value
+      list.scrollToPosition(999*1000);
+    }
+  }, [listData]);
 
   const addItem = () => {
     const newItem = {
@@ -132,7 +138,7 @@ function VirtuallyDom() {
                   rowHeight={cache.current.rowHeight}
                   deferredMeasurementCache={cache.current}
                   scrollToRow={setTimeout(() => {
-                    listRef.current?.scrollToRow(listData.length - 1);
+                    // listRef.current?.scrollToRow(listData.length - 1);
                     if (listRef) {
                       // listRef.current?.scrollToRow(listData.length - 1);
                     }

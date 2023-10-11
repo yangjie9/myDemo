@@ -25,14 +25,19 @@ export default defineConfig({
       component: './Access',
     },
     {
-      name:'虚拟列表',
-      path:'/virtual',
-      component:'./VirtuallyDom',
+      name: '虚拟列表',
+      path: '/virtual',
+      component: './VirtuallyDom',
     },
     {
-      name:'测试列表',
-      path:'/virtua-dom',
-      component:'./VirtuaDom',
+      name: '测试列表',
+      path: '/virtua-dom',
+      component: './VirtuaDom',
+    },
+    {
+      name: '无限加载',
+      path: '/infinite-demo',
+      component: './InfiniteDemo',
     },
     {
       name: ' CRUD 示例',
@@ -42,4 +47,3 @@ export default defineConfig({
   ],
   npmClient: 'npm',
 });
-
