@@ -21,14 +21,14 @@ function InfiniteList() {
   }
 
   function loadMoreRows({ startIndex, stopIndex }) {
-    // console.log('🚀 ~ startIndex, stopIndex:', startIndex, stopIndex);
+    console.log('🚀 ~ startIndex, stopIndex:', startIndex, stopIndex);
     // setMessages(msgs.slice(startIndex, stopIndex));
     // console.log(
     //   '🚀 ~ msgs.slice(startIndex, stopIndex):',
     //   msgs.slice(startIndex, stopIndex),
     // );
-    console.log('🚀🚀🚀', messages.length - 1 - stopIndex);
-    console.log('🚀🚀🚀', messages.length - 1 - startIndex);
+    console.log('🚀🚀🚀', msgs.length - 1 - stopIndex);
+    console.log('🚀🚀🚀', msgs.length - 1 - startIndex);
 
     // return fetch(`path/to/api?startIndex=${startIndex}&stopIndex=${stopIndex}`)
     //   .then(response => {
@@ -59,7 +59,7 @@ function InfiniteList() {
         isRowLoaded={isRowLoaded}
         loadMoreRows={loadMoreRows}
         rowCount={totalMessageCount} // 聊天消息总数
-        // threshold={10} // 触发加载的阈值
+        threshold={10} // 触发加载的阈值
       >
         {({ onRowsRendered, registerChild }) => (
           <List

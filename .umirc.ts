@@ -40,6 +40,11 @@ export default defineConfig({
       component: './InfiniteDemo',
     },
     {
+      name: '无限滚动',
+      path: '/infinite-dom',
+      component: './InfinitScroll',
+    },
+    {
       name: ' CRUD 示例',
       path: '/table',
       component: './Table',
