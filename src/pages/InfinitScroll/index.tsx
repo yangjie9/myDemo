@@ -16,6 +16,7 @@ function Chat() {
   const infiniteBox = useRef(null);
   const topRef = useRef(null); // 顶部观察器引用
   const bottomRef = useRef(null); // 底部观察器引用
+  const scrollOldHeight = useRef();
 
   // 截取数据
   const getMessage = (startIndex: number, endIndex: number, data?: any[]) => {
@@ -61,12 +62,12 @@ function Chat() {
       const endIndex = msgList.findIndex(
         (item) => item.mid === messages[0].mid,
       );
-      const startIndex = endIndex - 10 > 0 ? endIndex - 10 : 0;
+      const startIndex = endIndex - 2 > 0 ? endIndex - 2 : 0;
       const newMessages = getMessage(startIndex, endIndex, msgList);
       setMessages([...newMessages, ...messages]);
-      setTimeout(() => {
-        scrollRef.current.scrollTop = -24;
-      }, 100);
+      // setTimeout(() => {
+      //   scrollRef.current.scrollTop = -24;
+      // }, 100);
     }
   };
 
@@ -154,12 +155,23 @@ function Chat() {
 
   const handleScroll = () => {
     // const scrollTop = infiniteBox.current.lastScrollTop;
+    const oldHeight = scrollOldHeight.current
+    const scrollHeight = scrollRef.current.scrollHeight;
+    if(oldHeight && oldHeight !== scrollHeight){
+      const gapNum = scrollHeight - oldHeight
+      console.log("🚀 ~ file: index.tsx:163 ~ handleScroll ~ gapNum:", gapNum)
+      // handleScrollToIndex(scrollTop);
+      scrollRef.current.scrollTop = -gapNum;
+      scrollOldHeight.current = scrollHeight;
+      
+    }
     const scrollTop = scrollRef.current.scrollTop;
 
     if (Math.abs(Math.floor(scrollTop)) > 20) return;
     console.log('跳转', isToIndex);
     if (!isToIndex) {
       if (msgList[0].mid !== messages[0]?.mid) {
+        scrollOldHeight.current = scrollHeight;
         console.log('非最后一条数据');
         setBottomMore(true);
         bottomMessages();
@@ -195,10 +207,10 @@ function Chat() {
             flexDirection: 'column-reverse',
           }} //To put endMessage and loader to the top.
           inverse={true}
-          hasMore={hasMore}
+          hasMore={true}
           loader={<h4>加载更多...</h4>}
           scrollableTarget="scrollableDiv"
-          scrollThreshold={20} // 触发加载数据的阈值
+          scrollThreshold={100} // 触发加载数据的阈值
           ref={infiniteBox}
           onScroll={handleScroll}
         >
@@ -214,7 +226,7 @@ function Chat() {
                   style={{
                     display: 'flex',
                     gap: 8,
-                    ...(index % 3 === 0 ? itemStyle : {}),
+                    // ...(index % 3 === 0 ? itemStyle : {}),
                   }}
                 >
                   <div>
@@ -232,7 +244,7 @@ function Chat() {
                         borderRadius: 10,
                       }}
                     >
-                      {index % 5 === 0 && (
+                      {/* {index % 5 === 0 && (
                         <div
                           style={{
                             background: '#f6f6f6',
@@ -242,7 +254,7 @@ function Chat() {
                         >
                           {item?.content?.text}
                         </div>
-                      )}
+                      )} */}
                       {item?.content?.text}
                     </div>
                   </div>
