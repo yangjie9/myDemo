@@ -73,3 +73,36 @@
   )}
 </div>
 ))}
+
+
+
+timeSortByMessageList(messageList) {
+  console.log("🚀 ~ file: chat.js:268 ~ Chat ~ timeSortByMessageList ~ messageList:", messageList)
+  // const messageList = self.currentMessageList;
+  // const local = settings.locale;
+  // moment.updateLocale(local);
+  const timerMessageList=[]
+  const groupedArr = groupBy(
+    messageList.filter((msg) => msg && !MessageDeleteStatus.isDelete(msg.deleteFlag)),
+    (item) => moment(item.displayTime).format("YYYYMMDD")
+  );
+
+  // sort
+  const keys = sortBy(Object.keys(groupedArr), function (o) {
+    return moment(o);
+  });
+
+  keys.forEach((key) => {
+    groupedArr[key] = groupedArr[key].sort((a, b) => {
+      return a.id - b.id;
+    });
+  });
+
+  for (const time in groupedArr) {
+    const timeArrMessage = groupedArr[time];
+    timerMessageList.unshift({ timerId: time}, ...timeArrMessage );
+  }
+  console.log("🚀 ~ file: chat.js:293 ~ Chat ~ groupedArr[key]=groupedArr[key].sort ~ groupedArr:", timerMessageList)
+  // let allMsgList = self.currentMessageList;
+  return timerMessageList;
+}

@@ -27,11 +27,11 @@ function Chat() {
   // 顶部滚动
   const fetchMoreMessages = () => {
     if (
-      (messages[messages.length - 1]?.mid || messages[messages.length - 1]?.timerId) 
-      === 
-      (msgList[msgList.length - 1]?.mid || msgList[msgList.length - 1]?.timerId) 
-      ) {
-      console.log("🚀 ~ file: index.tsx:38:",messages,msgList)
+      (messages[messages.length - 1]?.mid ||
+        messages[messages.length - 1]?.timerId) ===
+      (msgList[msgList.length - 1]?.mid || msgList[msgList.length - 1]?.timerId)
+    ) {
+      console.log('🚀 ~ file: index.tsx:38:', messages, msgList);
       setHasMore(false);
       return;
     }
@@ -51,7 +51,7 @@ function Chat() {
   };
 
   // 底部滚动
-  const bottomMessages = () => {
+  const bottomMessages = async () => {
     if (messages[0]?.mid === msgList[0].mid) return;
     // 模拟获取更多消息的异步操作
     // 例如，使用API请求获取下一页的聊天消息
@@ -62,9 +62,9 @@ function Chat() {
       const endIndex = msgList.findIndex(
         (item) => item.mid === messages[0].mid,
       );
-      const startIndex = endIndex - 2 > 0 ? endIndex - 2 : 0;
+      const startIndex = endIndex - 5 > 0 ? endIndex - 5 : 0;
       const newMessages = getMessage(startIndex, endIndex, msgList);
-      setMessages([...newMessages, ...messages]);
+      await setMessages([...newMessages, ...messages]);
       // setTimeout(() => {
       //   scrollRef.current.scrollTop = -24;
       // }, 100);
@@ -73,9 +73,22 @@ function Chat() {
 
   useEffect(() => {
     // 初始化加载一些聊天消息
-    console.log("🚀 ~ file: index.tsx:73 ~ useEffect ~ 初始化加载一些聊天消息:")
+    console.log(
+      '🚀 ~ file: index.tsx:73 ~ useEffect ~ 初始化加载一些聊天消息:',
+    );
     fetchMoreMessages();
   }, []);
+
+  useEffect(() => {
+    if(scrollOldHeight.current){
+      const oldHeight = scrollOldHeight.current;
+      const scrollHeight = scrollRef.current?.scrollHeight;
+      if (oldHeight !== scrollHeight && scrollRef.current) {
+        let gapNum = scrollHeight - oldHeight;
+        scrollRef.current.scrollTop = -gapNum;
+      }
+    }
+  }, [scrollOldHeight.current]);
 
   // 创建顶部和底部观察器并监听触发
   // useEffect(() => {
@@ -152,23 +165,13 @@ function Chat() {
     }
   };
 
-
   const handleScroll = () => {
     // const scrollTop = infiniteBox.current.lastScrollTop;
-    const oldHeight = scrollOldHeight.current
+    
     const scrollHeight = scrollRef.current.scrollHeight;
-    if(oldHeight && oldHeight !== scrollHeight){
-      const gapNum = scrollHeight - oldHeight
-      console.log("🚀 ~ file: index.tsx:163 ~ handleScroll ~ gapNum:", gapNum)
-      // handleScrollToIndex(scrollTop);
-      scrollRef.current.scrollTop = -gapNum;
-      scrollOldHeight.current = scrollHeight;
-      
-    }
-    const scrollTop = scrollRef.current.scrollTop;
-
-    if (Math.abs(Math.floor(scrollTop)) > 20) return;
-    console.log('跳转', isToIndex);
+   
+    const gapNum = Math.abs(scrollRef?.current?.scrollTop)
+    if (gapNum > 10) return;
     if (!isToIndex) {
       if (msgList[0].mid !== messages[0]?.mid) {
         scrollOldHeight.current = scrollHeight;
@@ -226,7 +229,6 @@ function Chat() {
                   style={{
                     display: 'flex',
                     gap: 8,
-                    // ...(index % 3 === 0 ? itemStyle : {}),
                   }}
                 >
                   <div>
@@ -244,17 +246,6 @@ function Chat() {
                         borderRadius: 10,
                       }}
                     >
-                      {/* {index % 5 === 0 && (
-                        <div
-                          style={{
-                            background: '#f6f6f6',
-                            padding: '10px 15px',
-                            borderRadius: 10,
-                          }}
-                        >
-                          {item?.content?.text}
-                        </div>
-                      )} */}
                       {item?.content?.text}
                     </div>
                   </div>
@@ -287,7 +278,7 @@ function Chat() {
       {/* 77e45ea51b03573fdeb7e511a014c1c2 */}
       <button
         type="button"
-        onClick={() => scrollToItem("08a14fdd5b26599ad7b737ae6f6a292f")}
+        onClick={() => scrollToItem('08a14fdd5b26599ad7b737ae6f6a292f')}
       >
         跳转2
       </button>
